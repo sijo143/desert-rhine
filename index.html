@@ -326,8 +326,26 @@ padding:18px 22px;display:grid;grid-template-columns:repeat(3,1fr);gap:0}
 .f-ctrl:focus{background:#fff;border-color:var(--navy);box-shadow:0 0 0 3px rgba(30,42,120,.08)}
 .f-ctrl::placeholder{color:var(--ink-muted)}
 textarea.f-ctrl{resize:vertical;min-height:120px}
-.f-btn{width:100%;padding:16px;font-size:.82rem;font-weight:700;letter-spacing:1px;text-transform:uppercase;background:var(--navy);color:#fff;border:none;border-radius:var(--r-sm);transition:background .25s,box-shadow .25s;box-shadow:0 4px 20px rgba(30,42,120,.3);font-family:'Inter',sans-serif;margin-top:8px}
+.f-btn{width:100%;padding:16px;font-size:.82rem;font-weight:700;letter-spacing:1px;text-transform:uppercase;background:var(--navy);color:#fff;border:none;border-radius:var(--r-sm);transition:background .25s,box-shadow .25s,transform .2s;box-shadow:0 4px 20px rgba(30,42,120,.3);font-family:'Inter',sans-serif;margin-top:8px}
 .f-btn:hover{background:var(--navy-mid);box-shadow:0 8px 28px rgba(30,42,120,.4)}
+
+.f-ctrl.error{border-color:#D94F4F;background:#fff;box-shadow:0 0 0 3px rgba(217,79,79,.09)}
+.f-ctrl.valid{border-color:var(--green);background:#fff}
+.f-err{font-size:.72rem;color:#D94F4F;margin-top:6px;display:none;align-items:center;gap:6px;line-height:1.4}
+.f-err.show{display:flex}
+.f-err::before{content:'';width:13px;height:13px;flex-shrink:0;background:url("data:image/svg+xml,%3Csvg viewBox='0 0 14 14' xmlns='http://www.w3.org/2000/svg'%3E%3Ccircle cx='7' cy='7' r='7' fill='%23D94F4F'/%3E%3Cpath d='M7 4v3.5M7 9.2v.6' stroke='white' stroke-width='1.6' stroke-linecap='round'/%3E%3C/svg%3E") center/cover no-repeat}
+
+#form-success{display:none;padding:56px 32px 44px;text-align:center}
+.fs-icon{width:72px;height:72px;border-radius:50%;background:var(--green-pale);border:2px solid rgba(26,138,90,.14);display:flex;align-items:center;justify-content:center;margin:0 auto 28px}
+.fs-icon svg{width:30px;height:30px;stroke:var(--green);fill:none;stroke-width:2.5;stroke-linecap:round;stroke-linejoin:round}
+.fs-check{stroke-dasharray:32;stroke-dashoffset:32;animation:drawCheck .55s var(--ease-out) .2s forwards}
+@keyframes drawCheck{to{stroke-dashoffset:0}}
+.fs-title{font-family:'Poppins',sans-serif;font-size:1.25rem;font-weight:700;color:var(--ink);margin-bottom:10px;letter-spacing:-.2px}
+.fs-body{font-size:.9rem;color:var(--ink-soft);line-height:1.85;max-width:320px;margin:0 auto 28px}
+.fs-ref{display:block;font-size:.6rem;font-weight:600;letter-spacing:2px;text-transform:uppercase;color:var(--ink-muted);margin-bottom:24px;padding-top:20px;border-top:1px solid var(--border)}
+.fs-new{font-size:.74rem;font-weight:600;color:var(--navy);letter-spacing:.2px;text-decoration:underline;text-underline-offset:3px;background:none;border:none;font-family:'Inter',sans-serif;transition:color .2s;padding:0}
+.fs-new:hover{color:var(--navy-mid)}
+@keyframes shake{0%,100%{transform:translateX(0)}15%{transform:translateX(-7px)}35%{transform:translateX(7px)}55%{transform:translateX(-4px)}75%{transform:translateX(4px)}}
 
 footer{background:
 linear-gradient(rgba(255,255,255,.025) 1px,transparent 1px),
@@ -699,18 +717,45 @@ footer{padding:60px 24px 28px}
 </div>
 </div>
 <div class="ct-form rv rv-r">
+
+<div id="form-success">
+<div class="fs-icon">
+<svg viewBox="0 0 24 24"><polyline class="fs-check" points="20 6 9 17 4 12"/></svg>
+</div>
+<p class="fs-title">Enquiry Received</p>
+<p class="fs-body">Thank you. We'll review your project details and be in touch within one business day.</p>
+<span class="fs-ref">Desert Rhine Project Management · Dubai, UAE</span>
+<button class="fs-new" onclick="resetContactForm()">Send another enquiry</button>
+</div>
+
 <div class="f-row">
-<div class="f-grp"><label class="f-lbl" for="f-name">Name</label><input id="f-name" type="text" class="f-ctrl" placeholder="Your full name"/></div>
-<div class="f-grp"><label class="f-lbl" for="f-email">Email</label><input id="f-email" type="email" class="f-ctrl" placeholder="your@email.com"/></div>
+<div class="f-grp">
+<label class="f-lbl" for="f-name">Name</label>
+<input id="f-name" type="text" class="f-ctrl" placeholder="Your full name" autocomplete="name"/>
+<span class="f-err" id="err-name"></span>
 </div>
-<div class="f-grp"><label class="f-lbl" for="f-type">Project Type</label>
+<div class="f-grp">
+<label class="f-lbl" for="f-email">Email</label>
+<input id="f-email" type="email" class="f-ctrl" placeholder="your@email.com" autocomplete="email"/>
+<span class="f-err" id="err-email"></span>
+</div>
+</div>
+<div class="f-grp">
+<label class="f-lbl" for="f-type">Project Type</label>
 <select id="f-type" class="f-ctrl"><option value="" disabled selected>Select project type</option><option>Residential</option><option>Commercial</option><option>Industrial &amp; Warehousing</option><option>Data Center</option><option>Mixed-Use</option><option>Other</option></select>
+<span class="f-err" id="err-type"></span>
 </div>
-<div class="f-grp"><label class="f-lbl" for="f-stage">Current Project Stage</label>
+<div class="f-grp">
+<label class="f-lbl" for="f-stage">Current Project Stage</label>
 <select id="f-stage" class="f-ctrl"><option value="" disabled selected>Select current stage</option><option>Concept / Feasibility</option><option>Design</option><option>Procurement</option><option>Construction</option><option>Close-Out / Handover</option></select>
+<span class="f-err" id="err-stage"></span>
 </div>
-<div class="f-grp"><label class="f-lbl" for="f-msg">Message</label><textarea id="f-msg" class="f-ctrl" placeholder="Tell us about your project…" rows="4"></textarea></div>
-<button class="f-btn mag">Send Project Enquiry &nbsp;→</button>
+<div class="f-grp">
+<label class="f-lbl" for="f-msg">Message</label>
+<textarea id="f-msg" class="f-ctrl" placeholder="Tell us about your project…" rows="4"></textarea>
+<span class="f-err" id="err-msg"></span>
+</div>
+<button class="f-btn mag" id="f-submit" type="button">Send Project Enquiry &nbsp;→</button>
 </div>
 </div>
 </div>
@@ -959,6 +1004,99 @@ const t = document.querySelector(a.getAttribute('href'));
 if (t) { e.preventDefault(); t.scrollIntoView({ behavior: 'smooth', block: 'start' }); }
 });
 });
+
+(function() {
+const RULES = {
+'f-name':  { test: v => v.trim().length >= 2,                              msg: 'Please enter your full name' },
+'f-email': { test: v => /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(v.trim()),   msg: 'Please enter a valid email address' },
+'f-type':  { test: v => v !== '',                                          msg: 'Please select a project type' },
+'f-stage': { test: v => v !== '',                                          msg: 'Please select your current project stage' },
+'f-msg':   { test: v => v.trim().length >= 10,                             msg: 'Please describe your project (at least 10 characters)' },
+};
+
+function setField(id, isValid, msg) {
+const el  = document.getElementById(id);
+const err = document.getElementById('err-' + id.slice(2));
+if (!el || !err) return;
+el.classList.toggle('error', !isValid);
+el.classList.toggle('valid',  isValid);
+err.textContent = msg || '';
+err.classList.toggle('show', !isValid);
+}
+
+function validate(id) {
+const el = document.getElementById(id);
+if (!el) return true;
+const ok = RULES[id].test(el.value);
+setField(id, ok, ok ? '' : RULES[id].msg);
+return ok;
+}
+
+// Validate on blur; re-validate live once an error is shown
+Object.keys(RULES).forEach(id => {
+const el = document.getElementById(id);
+if (!el) return;
+const isSelect = el.tagName === 'SELECT';
+el.addEventListener('blur',   () => { if (el.value !== '' || isSelect) validate(id); });
+el.addEventListener('input',  () => { if (el.classList.contains('error') || el.classList.contains('valid')) validate(id); });
+el.addEventListener('change', () => validate(id));
+});
+
+// Submit
+const btn = document.getElementById('f-submit');
+if (btn) {
+btn.addEventListener('click', () => {
+const allOk = Object.keys(RULES).map(validate).every(Boolean);
+if (!allOk) {
+btn.style.animation = 'none';
+btn.offsetWidth; // reflow
+btn.style.animation = 'shake .45s var(--ease)';
+const first = document.querySelector('.f-ctrl.error');
+if (first) first.scrollIntoView({ behavior: 'smooth', block: 'center' });
+return;
+}
+showSuccess();
+});
+}
+
+function showSuccess() {
+const form    = document.querySelector('.ct-form');
+const success = document.getElementById('form-success');
+const fields  = Array.from(form.children).filter(c => c.id !== 'form-success');
+// Fade out fields
+fields.forEach(c => { c.style.transition = 'opacity .3s,transform .3s'; c.style.opacity = '0'; c.style.transform = 'translateY(8px)'; });
+setTimeout(() => {
+fields.forEach(c => { c.style.display = 'none'; });
+success.style.display = 'block';
+success.style.opacity = '0';
+success.style.transform = 'translateY(16px)';
+success.style.transition = 'opacity .5s var(--ease-out), transform .5s var(--ease-out)';
+requestAnimationFrame(() => requestAnimationFrame(() => {
+success.style.opacity = '1';
+success.style.transform = 'none';
+// Re-trigger checkmark draw
+const check = success.querySelector('.fs-check');
+if (check) { check.style.animation = 'none'; check.offsetWidth; check.style.animation = ''; }
+}));
+}, 300);
+}
+
+window.resetContactForm = function() {
+const form    = document.querySelector('.ct-form');
+const success = document.getElementById('form-success');
+success.style.display = 'none';
+const fields = Array.from(form.children).filter(c => c.id !== 'form-success');
+fields.forEach(c => { c.style.display = ''; c.style.opacity = ''; c.style.transform = ''; c.style.transition = ''; });
+Object.keys(RULES).forEach(id => {
+const el = document.getElementById(id);
+if (!el) return;
+el.value = el.tagName === 'SELECT' ? '' : '';
+el.classList.remove('error', 'valid');
+const err = document.getElementById('err-' + id.slice(2));
+if (err) { err.textContent = ''; err.classList.remove('show'); }
+});
+};
+})();
 
 const burger = document.getElementById('burger');
 let mOpen = false;
