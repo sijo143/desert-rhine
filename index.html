@@ -91,9 +91,13 @@ nav.s .n-links a:hover{color:var(--navy)}
 
 nav.s .n-cta{background:var(--navy);border-color:transparent;box-shadow:0 4px 12px rgba(30,42,120,.3)}
 nav.s .n-cta:hover{background:var(--navy-mid);box-shadow:0 8px 20px rgba(30,42,120,.4)}
-.n-burger{display:none;flex-direction:column;gap:5px;padding:4px;background:none;border:none}
-.n-burger span{display:block;width:22px;height:1.5px;background:#fff;border-radius:2px;transition:.3s}
+.n-burger{display:none;flex-direction:column;gap:5px;padding:4px;background:none;border:none;width:36px;height:36px;align-items:center;justify-content:center}
+.n-burger span{display:block;width:22px;height:1.5px;border-radius:2px;background:#fff;transition:transform .44s var(--spring),opacity .28s var(--ease),width .3s var(--ease),background .3s}
 nav.s .n-burger span{background:var(--ink)}
+
+.n-burger.open span:nth-child(1){transform:translateY(6.5px) rotate(45deg)}
+.n-burger.open span:nth-child(2){opacity:0;transform:scaleX(0)}
+.n-burger.open span:nth-child(3){transform:translateY(-6.5px) rotate(-45deg)}
 
 .rv{opacity:0;transform:translateY(32px);transition:opacity 1s var(--ease-out),transform 1s var(--ease-out)}
 .rv-l{opacity:0;transform:translateX(-48px);transition:opacity 1s var(--ease-out),transform 1s var(--ease-out)}
@@ -370,6 +374,41 @@ padding:80px 80px 40px;border-top:1px solid rgba(255,255,255,.04)}
 .bt svg{width:14px;height:14px;stroke:currentColor;fill:none;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round;transition:transform .3s var(--ease-out)}
 .bt:hover svg{transform:translateY(-4px)}
 
+#mob-menu{position:fixed;inset:0;z-index:496;
+background:rgba(8,14,36,.97);
+backdrop-filter:blur(28px) saturate(160%);-webkit-backdrop-filter:blur(28px) saturate(160%);
+background-image:linear-gradient(rgba(255,255,255,.028) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.028) 1px,transparent 1px),linear-gradient(rgba(8,14,36,.97),rgba(8,14,36,.97));
+background-size:56px 56px,56px 56px,auto;
+display:flex;flex-direction:column;padding:96px 36px 48px;
+opacity:0;pointer-events:none;
+transform:translateY(-18px) scale(.98);
+transition:opacity .42s var(--ease-out),transform .42s var(--ease-out)}
+#mob-menu.open{opacity:1;pointer-events:all;transform:none}
+.mob-nav{display:flex;flex-direction:column;flex:1;justify-content:center;gap:0}
+.mob-nav a{
+font-family:'Poppins',sans-serif;font-size:clamp(1.9rem,9vw,2.4rem);font-weight:700;
+color:rgba(255,255,255,.65);padding:15px 0;
+border-bottom:1px solid rgba(255,255,255,.06);letter-spacing:-.5px;
+display:flex;align-items:center;justify-content:space-between;
+opacity:0;transform:translateY(22px);
+transition:opacity .42s var(--ease-out),transform .42s var(--ease-out),color .2s}
+.mob-nav a span{font-size:.72rem;font-weight:400;letter-spacing:2px;color:rgba(255,255,255,.2);font-family:'Inter',sans-serif;text-transform:uppercase;transition:color .2s,transform .25s var(--ease-out)}
+.mob-nav a:hover{color:#fff}
+.mob-nav a:hover span{color:rgba(255,255,255,.5);transform:translateX(4px)}
+#mob-menu.open .mob-nav a{opacity:1;transform:none}
+#mob-menu.open .mob-nav a:nth-child(1){transition-delay:.06s}
+#mob-menu.open .mob-nav a:nth-child(2){transition-delay:.11s}
+#mob-menu.open .mob-nav a:nth-child(3){transition-delay:.16s}
+#mob-menu.open .mob-nav a:nth-child(4){transition-delay:.21s}
+#mob-menu.open .mob-nav a:nth-child(5){transition-delay:.26s}
+.mob-foot{border-top:1px solid rgba(255,255,255,.07);padding-top:28px;opacity:0;transform:translateY(14px);transition:opacity .42s var(--ease-out) .3s,transform .42s var(--ease-out) .3s}
+#mob-menu.open .mob-foot{opacity:1;transform:none}
+.mob-cta{display:block;width:100%;padding:15px;background:var(--blue-bright);color:#fff;text-align:center;font-size:.78rem;font-weight:700;letter-spacing:1px;text-transform:uppercase;border-radius:var(--r-sm);margin-bottom:20px;font-family:'Inter',sans-serif;border:none;transition:background .25s,transform .2s var(--ease-out);cursor:pointer}
+.mob-cta:hover{background:#2450C8;transform:translateY(-1px)}
+.mob-meta{display:flex;justify-content:space-between;align-items:center}
+.mob-loc{font-size:.6rem;font-weight:600;letter-spacing:1.8px;text-transform:uppercase;color:rgba(255,255,255,.25)}
+.mob-num{font-size:.72rem;color:rgba(255,255,255,.32);letter-spacing:.3px}
+
 @media(max-width:1100px){.svc-grid{grid-template-columns:repeat(2,1fr)}.ab-chip{right:0;bottom:-20px}}
 @media(max-width:900px){
 .section{padding:100px 40px}
@@ -464,6 +503,23 @@ footer{padding:60px 24px 28px}
 <button class="n-cta mag" onclick="document.getElementById('contact').scrollIntoView({behavior:'smooth'})">Request Consultation</button>
 <button class="n-burger" id="burger" aria-label="Toggle navigation menu" aria-expanded="false"><span></span><span></span><span></span></button>
 </nav>
+
+<div id="mob-menu" role="dialog" aria-modal="true" aria-label="Navigation">
+<nav class="mob-nav">
+<a href="#about"><span>01</span>About</a>
+<a href="#services"><span>02</span>Services</a>
+<a href="#sectors"><span>03</span>Sectors</a>
+<a href="#portfolio"><span>04</span>Portfolio</a>
+<a href="#contact"><span>05</span>Contact</a>
+</nav>
+<div class="mob-foot">
+<a href="#contact" class="mob-cta">Request a Consultation</a>
+<div class="mob-meta">
+<span class="mob-loc">Dubai, UAE</span>
+<span class="mob-num">+971 50 100 4678</span>
+</div>
+</div>
+</div>
 
 <section class="hero" id="home">
 <div class="hero-bg-photo"></div>
@@ -1123,29 +1179,31 @@ if (err) { err.textContent = ''; err.classList.remove('show'); }
 };
 })();
 
-const burger = document.getElementById('burger');
+(function() {
+const burger  = document.getElementById('burger');
+const mobMenu = document.getElementById('mob-menu');
 let mOpen = false;
-if (burger) {
-burger.addEventListener('click', () => {
-mOpen = !mOpen;
+
+function toggleMenu(force) {
+mOpen = force !== undefined ? force : !mOpen;
 burger.setAttribute('aria-expanded', mOpen);
-let m = document.getElementById('mob-menu');
-if (mOpen) {
-if (!m) {
-m = document.createElement('div'); m.id = 'mob-menu';
-m.style.cssText = 'position:fixed;top:76px;left:0;right:0;background:rgba(255,255,255,.98);backdrop-filter:blur(20px);padding:24px 32px;box-shadow:0 20px 40px rgba(0,0,0,.1);z-index:499;display:flex;flex-direction:column;gap:0;border-top:1px solid #E2E6F0';
-['About','Services','Sectors','Portfolio','Contact'].forEach(t => {
-const a = document.createElement('a'); a.href = '#' + t.toLowerCase();
-a.textContent = t;
-a.style.cssText = 'font-size:.9rem;font-weight:600;color:#0D1840;padding:14px 0;border-bottom:1px solid #EEF1F7;letter-spacing:.3px';
-a.addEventListener('click', () => { m.remove(); mOpen = false; });
-m.appendChild(a);
-});
-document.body.appendChild(m);
+burger.classList.toggle('open', mOpen);
+mobMenu.classList.toggle('open', mOpen);
+document.body.style.overflow = mOpen ? 'hidden' : '';
 }
-} else { m && m.remove(); }
+
+if (burger && mobMenu) {
+burger.addEventListener('click', () => toggleMenu());
+mobMenu.querySelectorAll('a').forEach(a => {
+a.addEventListener('click', () => {
+toggleMenu(false);
+const target = document.querySelector(a.getAttribute('href'));
+if (target) setTimeout(() => target.scrollIntoView({behavior:'smooth',block:'start'}), 300);
 });
+});
+document.addEventListener('keydown', e => { if (e.key === 'Escape' && mOpen) toggleMenu(false); });
 }
+})();
 </script>
 </body>
 </html>
