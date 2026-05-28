@@ -375,7 +375,7 @@ padding:80px 80px 40px;border-top:1px solid rgba(255,255,255,.04)}
 .bt:hover svg{transform:translateY(-4px)}
 
 #mob-menu{
-position:fixed;inset:0;z-index:496;
+position:fixed;top:76px;left:0;right:0;bottom:0;z-index:499;
 background:rgba(8,14,36,.97);
 backdrop-filter:blur(24px);-webkit-backdrop-filter:blur(24px);
 background-image:
@@ -384,9 +384,9 @@ linear-gradient(90deg,rgba(255,255,255,.028) 1px,transparent 1px),
 linear-gradient(rgba(8,14,36,.97),rgba(8,14,36,.97));
 background-size:56px 56px,56px 56px,auto;
 display:flex;flex-direction:column;
-padding:130px 36px 48px;
+padding:32px 36px 48px;
 opacity:0;pointer-events:none;
-transform:translateY(-12px);
+transform:translateY(-8px);
 transition:opacity .38s var(--ease-out),transform .38s var(--ease-out)}
 #mob-menu.open{opacity:1;pointer-events:all;transform:none}
 
@@ -1199,6 +1199,7 @@ if (err) { err.textContent = ''; err.classList.remove('show'); }
 (function() {
 const burger  = document.getElementById('burger');
 const mobMenu = document.getElementById('mob-menu');
+const navEl   = document.querySelector('nav');
 let mOpen = false;
 
 function toggleMenu(force) {
@@ -1207,6 +1208,8 @@ burger.setAttribute('aria-expanded', mOpen);
 burger.classList.toggle('open', mOpen);
 mobMenu.classList.toggle('open', mOpen);
 document.body.style.overflow = mOpen ? 'hidden' : '';
+
+if (navEl) navEl.classList.toggle('s', mOpen || window.scrollY > 10);
 }
 
 if (burger && mobMenu) {
