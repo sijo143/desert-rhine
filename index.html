@@ -8,6 +8,8 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
 <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@1,300&family=Inter:wght@300;400;500;600;700&family=Poppins:wght@300;500;700;800&display=swap" onload="this.onload=null;this.rel='stylesheet'"/>
 <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@1,300&family=Inter:wght@300;400;500;600;700&family=Poppins:wght@300;500;700;800&display=swap"/></noscript>
+<script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+<script>emailjs.init('IWqcki8FppTWen8CS');</script>
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 html{scroll-behavior:smooth;-webkit-text-size-adjust:100%}
@@ -1147,13 +1149,30 @@ btn.addEventListener('click', () => {
 const allOk = Object.keys(RULES).map(validate).every(Boolean);
 if (!allOk) {
 btn.style.animation = 'none';
-btn.offsetWidth; // reflow
+btn.offsetWidth;
 btn.style.animation = 'shake .45s var(--ease)';
 const first = document.querySelector('.f-ctrl.error');
 if (first) first.scrollIntoView({ behavior: 'smooth', block: 'center' });
 return;
 }
+// Disable button and show sending state
+btn.disabled = true;
+btn.textContent = 'Sending...';
+// Send via EmailJS
+emailjs.send('service_1xvneav', 'template_uqtsa8o', {
+name:          document.getElementById('f-name').value.trim(),
+email:         document.getElementById('f-email').value.trim(),
+project_type:  document.getElementById('f-type').value,
+project_stage: document.getElementById('f-stage').value,
+message:       document.getElementById('f-msg').value.trim(),
+}).then(function() {
 showSuccess();
+}, function(error) {
+btn.disabled = false;
+btn.textContent = 'Send Project Enquiry →';
+alert('Something went wrong. Please try again or email us directly at info@desertrhineprojects.com');
+console.error('EmailJS error:', error);
+});
 });
 }
 
