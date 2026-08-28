@@ -534,10 +534,16 @@ scroll-snap-type:x mandatory;
 -webkit-overflow-scrolling:touch;
 scrollbar-width:none;
 gap:14px;
-padding:4px 24px 20px;
+padding:4px 24px 20px 0;
 margin:0 -24px;
 touch-action:pan-x;
 scroll-padding-left:24px;
+}
+.svc-grid::before{
+content:'';
+min-width:24px;
+flex-shrink:0;
+display:block;
 }
 .svc-grid::-webkit-scrollbar{display:none}
 .svc-grid .svc{
@@ -545,6 +551,7 @@ min-width:78vw;
 max-width:78vw;
 scroll-snap-align:start;
 flex-shrink:0;
+touch-action:pan-x;
 }
 
 .svc-swipe-hint{display:flex;align-items:center;justify-content:center;gap:8px;margin-top:4px;font-size:.65rem;font-weight:500;letter-spacing:1.5px;text-transform:uppercase;color:var(--ink-muted);opacity:.7}
