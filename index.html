@@ -1390,6 +1390,111 @@ buildDots();
 grid.addEventListener('scroll', updateDots, { passive: true });
 window.addEventListener('resize', buildDots);
 })();
+
+(function() {
+function isMobile() { return window.innerWidth <= 640; }
+if (!isMobile()) return;
+
+var grid    = document.querySelector('.svc-grid');
+var section = document.getElementById('services');
+if (!grid || !section) return;
+
+var INITIAL_DELAY = 2500;
+var AUTO_INTERVAL = 3500;
+var RESUME_DELAY  = 6000;
+
+var autoTimer      = null;
+var resumeTimer    = null;
+var sectionVisible = false;
+var userTouching   = false;
+var started        = false;
+
+function getCards() { return Array.from(grid.querySelectorAll('.svc')); }
+
+function getCurrentIndex() {
+var cards     = getCards();
+var scrollLeft = grid.scrollLeft;
+var closest   = 0, minDist = Infinity;
+cards.forEach(function(c, i) {
+var dist = Math.abs(c.offsetLeft - 24 - scrollLeft);
+if (dist < minDist) { minDist = dist; closest = i; }
+});
+return closest;
+}
+
+function scrollToCard(index) {
+var cards = getCards();
+if (index < 0 || index >= cards.length) return;
+grid.scrollTo({ left: Math.max(0, cards[index].offsetLeft - 24), behavior: 'smooth' });
+}
+
+function stopAuto() {
+clearTimeout(autoTimer);
+autoTimer = null;
+}
+
+function advance() {
+if (!isMobile() || !sectionVisible || userTouching || document.hidden) return;
+var idx   = getCurrentIndex();
+var total = getCards().length;
+if (idx < total - 1) {
+scrollToCard(idx + 1);
+autoTimer = setTimeout(advance, AUTO_INTERVAL);
+}
+
+}
+
+function tryResume() {
+if (!sectionVisible || userTouching || document.hidden) return;
+if (getCurrentIndex() < getCards().length - 1) {
+autoTimer = setTimeout(advance, AUTO_INTERVAL);
+}
+}
+
+
+grid.addEventListener('touchstart', function() {
+userTouching = true;
+stopAuto();
+clearTimeout(resumeTimer);
+}, { passive: true });
+
+grid.addEventListener('touchend', function() {
+clearTimeout(resumeTimer);
+resumeTimer = setTimeout(function() {
+userTouching = false;
+tryResume();
+}, RESUME_DELAY);
+}, { passive: true });
+
+
+document.addEventListener('visibilitychange', function() {
+if (document.hidden) { stopAuto(); }
+else if (!userTouching) { tryResume(); }
+});
+
+
+var io = new IntersectionObserver(function(entries) {
+entries.forEach(function(entry) {
+sectionVisible = entry.isIntersecting;
+if (sectionVisible && !userTouching) {
+if (!started) {
+autoTimer = setTimeout(function() { started = true; advance(); }, INITIAL_DELAY);
+} else {
+tryResume();
+}
+} else {
+stopAuto();
+}
+});
+}, { threshold: 0.35 });
+
+io.observe(section);
+
+
+window.addEventListener('resize', function() {
+if (!isMobile()) { stopAuto(); io.disconnect(); }
+}, { passive: true });
+})();
 </script>
 </body>
 </html>
