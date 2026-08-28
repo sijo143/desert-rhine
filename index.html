@@ -536,6 +536,8 @@ scrollbar-width:none;
 gap:14px;
 padding:4px 24px 20px;
 margin:0 -24px;
+touch-action:pan-x;
+scroll-padding-left:24px;
 }
 .svc-grid::-webkit-scrollbar{display:none}
 .svc-grid .svc{
@@ -1355,7 +1357,7 @@ const d = document.createElement('button');
 d.className = 'svc-dot' + (i === 0 ? ' active' : '');
 d.setAttribute('aria-label', 'Go to service ' + (i+1));
 d.addEventListener('click', () => {
-cards[i].scrollIntoView({ behavior:'smooth', block:'nearest', inline:'start' });
+grid.scrollTo({ left: Math.max(0, cards[i].offsetLeft - 24), behavior: 'smooth' });
 });
 dots.appendChild(d);
 });
